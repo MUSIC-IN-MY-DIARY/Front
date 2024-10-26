@@ -1,0 +1,24 @@
+/* src/neumorphism.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.neumorphism-button {
+  @apply p-3 rounded-lg border transition-all duration-200 ease-out;
+  background-color: #efeeee;
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1),
+    -4px -4px 6px rgba(255, 255, 255, 0.7);
+}
+
+.neumorphism-button:hover {
+  @apply transform scale-105;
+  color: rgb(190, 62, 62);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1),
+    -4px -4px 10px rgba(255, 255, 255, 0.7);
+}
+
+.neumorphism-button:focus {
+  outline: none;
+  box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.1),
+    inset -4px -4px 10px rgba(255, 255, 255, 0.7);
+}
