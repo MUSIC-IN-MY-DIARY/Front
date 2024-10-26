@@ -35,7 +35,7 @@ const LoginForm = () => {
 
   return (
     <div className='flex flex-col items-center justify-center h-screen bg-gray-100'>
-      <h2 className='text-3xl font-bold text-gray-700 mb-8'>Log In</h2>
+      <h2 className='text-3xl font-bold text-gray-800 mb-8'>Log In</h2>
       <form
         onSubmit={handleSubmit}
         className='bg-white p-8 rounded-lg shadow-md w-80'
@@ -45,7 +45,7 @@ const LoginForm = () => {
             htmlFor='userEmail'
             className='block text-sm font-medium text-gray-600 mb-2'
           >
-            email
+            Email
           </label>
           <input
             type='text'
@@ -61,7 +61,7 @@ const LoginForm = () => {
             htmlFor='password'
             className='block text-sm font-medium text-gray-600 mb-2'
           >
-            password
+            Password
           </label>
           <input
             type='password'
