@@ -2,7 +2,7 @@ import { useState } from 'react';
 import '../../neumorphism.css';
 
 const LoginForm = () => {
-  const [userEmail, setUserEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -11,19 +11,18 @@ const LoginForm = () => {
     setError('');
 
     try {
-      const response = await fetch('/api/login', {
+      const formData = new FormData();
+      formData.append('username', username);
+      formData.append('password', password);
+
+      const response = await fetch('http://localhost:8080/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userEmail, password }),
+        body: formData,
       });
 
       if (response.ok) {
         const data = await response.json();
-        // 로그인 성공 처리
-        console.log('로그인 성공:', data);
-        // 여기에 로그인 성공 후 처리 로직 추가 (예: 리다이렉트, 상태 업데이트 등)
+        console.log('로그인 성공 : ', data);
       } else {
         const errorData = await response.json();
         setError(errorData.message || '로그인에 실패했습니다.');
@@ -42,16 +41,16 @@ const LoginForm = () => {
       >
         <div className='mb-4'>
           <label
-            htmlFor='userEmail'
+            htmlFor='username'
             className='block text-sm font-medium text-gray-600 mb-2'
           >
             Email
           </label>
           <input
             type='text'
-            id='userEmail'
-            value={userEmail}
-            onChange={(e) => setUserEmail(e.target.value)}
+            id='username'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
             className='w-full p-3 rounded-lg border bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-300'
           />

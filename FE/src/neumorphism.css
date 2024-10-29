@@ -19,6 +19,7 @@
 
 .neumorphism-button:focus {
   outline: none;
+  color: rgb(190, 62, 62);
   box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.1),
     inset -4px -4px 10px rgba(255, 255, 255, 0.7);
 }
