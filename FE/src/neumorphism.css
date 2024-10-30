@@ -23,3 +23,35 @@
   box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.1),
     inset -4px -4px 10px rgba(255, 255, 255, 0.7);
 }
+
+/* Chat card style with neumorphism */
+.neumorphism-card {
+  @apply p-6 mb-4 rounded-xl transition-all ease-in-out max-w-lg w-full mx-auto;
+  background-color: #e0e5ec;
+  box-shadow: 9px 9px 16px rgba(163, 177, 198, 0.6),
+    -9px -9px 16px rgba(255, 255, 255, 0.5);
+  max-width: 40rem;
+  width: 100%;
+  &:hover {
+    box-shadow: 9px 9px 16px rgba(163, 177, 198, 0.6),
+      -9px -9px 16px rgba(255, 255, 255, 0.5),
+      inset 3px 3px 7px rgba(136, 165, 191, 0.48), inset -3px -3px 7px #ffffff;
+  }
+}
+
+.neumorphism-input {
+  @apply p-4 w-full rounded-lg border focus:outline-none focus:ring transition-all duration-200 ease-in-out;
+  background-color: #e0e5ec;
+  box-shadow: inset 4px 4px 6px rgba(163, 177, 198, 0.6),
+    inset -4px -4px 6px rgba(255, 255, 255, 0.5);
+  max-width: 40rem;
+  width: 100%;
+  &:focus {
+    box-shadow: inset 6px 6px 10px rgba(163, 177, 198, 0.8),
+      inset -6px -6px 10px rgba(255, 255, 255, 0.7);
+  }
+}
+
+.chat-container {
+  max-height: 100vh;
+}

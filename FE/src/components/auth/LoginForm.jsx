@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import '../../neumorphism.css';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +25,7 @@ const LoginForm = () => {
       if (response.ok) {
         const data = await response.json();
         console.log('로그인 성공 : ', data);
+        navigate('/dashboard');
       } else {
         const errorData = await response.json();
         setError(errorData.message || '로그인에 실패했습니다.');
