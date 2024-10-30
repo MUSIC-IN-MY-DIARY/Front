@@ -25,7 +25,7 @@ const LoginForm = () => {
       if (response.ok) {
         const data = await response.json();
         console.log('로그인 성공 : ', data);
-        navigate('/dashboard');
+        navigate('/diary');
       } else {
         const errorData = await response.json();
         setError(errorData.message || '로그인에 실패했습니다.');
