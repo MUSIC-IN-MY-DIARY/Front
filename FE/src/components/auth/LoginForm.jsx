@@ -8,6 +8,10 @@ const LoginForm = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const handleSignup = () => {
+    navigate('/member/signup');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -80,6 +84,13 @@ const LoginForm = () => {
           className='neumorphism-button w-full py-3 font-semibold text-gray-700'
         >
           submit
+        </button>
+        <button
+          type='submit'
+          className='neumorphism-button w-full py-3 font-semibold text-gray-700 my-4'
+          onClick={handleSignup}
+        >
+          sign up
         </button>
       </form>
     </div>
