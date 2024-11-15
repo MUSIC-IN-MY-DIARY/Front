@@ -24,6 +24,7 @@ const LoginForm = () => {
       const response = await fetch('http://localhost:8080/login', {
         method: 'POST',
         body: formData,
+        credentials: 'include',
       });
 
       if (response.ok) {

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import '../../neumorphism.css';
+import { useNavigate } from 'react-router-dom';
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ const SignupForm = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errorMessage, setErrorMseeage] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,11 +47,13 @@ const SignupForm = () => {
       const data = await response.json();
       if (response.ok && data.isSuccess) {
         alert('회원가입 성공!');
+        navigate('/');
       } else {
-        alert('회원가입 실패. 다시 시도해주세요!');
+        alert(data.message || '회원가입 실패. 다시 시도해주세요!');
       }
     } catch (error) {
       alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      // console.log('오류 발생 ', error);
     }
   };
 
