@@ -1,10 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const goToMyPage = () => {
-    navigate('/member/mypage');
+  const isActive = (path) => {
+    return location.pathname === path;
   };
 
   return (
@@ -14,17 +15,32 @@ const Header = () => {
         <div className='flex items-center gap-4'>
           <button
             onClick={() => navigate('/diary/recommend-songs')}
-            className='neumorphism-button'
+            className={`neumorphism-button ${
+              isActive('/diary/recommend-songs')
+                ? 'shadow-neumorph-pressed'
+                : 'shadow-neumorph'
+            }`}
           >
             노래 추천
           </button>
           <button
             onClick={() => navigate('/diary/generate-lyrics')}
-            className='neumorphism-button'
+            className={`neumorphism-button ${
+              isActive('/diary/generate-lyrics')
+                ? 'shadow-neumorph-pressed'
+                : 'shadow-neumorph'
+            }`}
           >
             가사 생성
           </button>
-          <button onClick={goToMyPage} className='neumorphism-button'>
+          <button
+            onClick={() => navigate('/member/mypage')}
+            className={`neumorphism-button ${
+              isActive('/member/mypage')
+                ? 'shadow-neumorph-pressed'
+                : 'shadow-neumorph'
+            }`}
+          >
             <span role='img' aria-label='My Page'>
               💌
             </span>

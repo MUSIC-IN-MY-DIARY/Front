@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 const ChatComponent = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
@@ -13,21 +14,25 @@ const ChatComponent = () => {
   }, [messages]);
 
   const handleSendMessage = async () => {
-    if (inputText.trim()) {
+    if (inputText.trim() && !isLoading) {
+      setIsLoading(true);
+
       const userMessage = { type: 'user', text: inputText };
       setMessages((prev) => [...prev, userMessage]);
       setInputText('');
 
       try {
-        const token = localStorage.getItem('jwtToken');
-        const response = await fetch('http://localhost:8080/diary/write', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authentication: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ message: inputText }),
-        });
+        const response = await fetch(
+          'http://localhost:8080/diary/recommend-songs',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({ diaryContent: inputText }),
+          }
+        );
 
         if (!response.ok) {
           throw new Error('서버에서 오류 응답을 받았습니다.');
@@ -35,8 +40,21 @@ const ChatComponent = () => {
 
         const data = await response.json();
 
-        if (data.isSuccess && data.result) {
-          const chatMessage = { type: 'chatbot', text: data.result.content };
+        if (data.isSuccess) {
+          const songs = JSON.parse(data.result.answer);
+
+          const formattedSongs = songs
+            .map(
+              (song) =>
+                `🎵 ${song.song_title} - ${song.artist}\n장르: ${song.genre}`
+            )
+            .join('\n\n');
+
+          const chatMessage = {
+            type: 'chatbot',
+            text: `추천 노래 목록:\n\n${formattedSongs}`,
+          };
+
           setMessages((prev) => [...prev, chatMessage]);
         } else {
           const errorMessage = {
@@ -51,6 +69,8 @@ const ChatComponent = () => {
           text: `서버와 통신 중 오류가 발생했습니다: ${error.message}`,
         };
         setMessages((prev) => [...prev, errorMessage]);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -81,19 +101,23 @@ const ChatComponent = () => {
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key == 'Enter' && !e.repeat) {
+            if (e.key === 'Enter' && !e.repeat && !isLoading) {
               e.preventDefault();
               handleSendMessage();
             }
           }}
-          placeholder='일기를 작성해보세요! 💌'
+          disabled={isLoading}
+          placeholder={isLoading ? '처리 중...' : '일기를 작성해보세요! 💌'}
           className='neumorphism-input'
         />
         <button
           onClick={handleSendMessage}
-          className='ml-4 neumorphism-button bg-blue-500 text-gray-600'
+          disabled={isLoading}
+          className={`ml-4 neumorphism-button ${
+            isLoading ? 'opacity-50 cursor-not-allowed' : 'bg-blue-500'
+          } text-gray-600`}
         >
-          Submit
+          {isLoading ? '처리 중...' : 'Submit'}
         </button>
       </div>
     </div>

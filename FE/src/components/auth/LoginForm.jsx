@@ -28,9 +28,9 @@ const LoginForm = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        console.log('로그인 성공 : ', data);
-        navigate('/diary');
+        // const data = await response.json();
+        // console.log('로그인 성공 : ', data);
+        navigate('/diary/recommend-songs');
       } else {
         const errorData = await response.json();
         setError(errorData.message || '로그인에 실패했습니다.');

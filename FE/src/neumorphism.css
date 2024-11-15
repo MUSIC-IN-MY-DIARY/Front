@@ -6,22 +6,17 @@
 .neumorphism-button {
   @apply p-3 rounded-lg border transition-all duration-200 ease-out;
   background-color: #efeeee;
-  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1),
-    -4px -4px 6px rgba(255, 255, 255, 0.7);
 }
 
-.neumorphism-button:hover {
-  @apply transform scale-105;
-  color: rgb(190, 62, 62);
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1),
-    -4px -4px 10px rgba(255, 255, 255, 0.7);
+.shadow-neumorph {
+  background: #f0f0f0;
+  box-shadow: 5px 5px 10px #d1d1d1, -5px -5px 10px #ffffff;
 }
 
-.neumorphism-button:focus {
-  outline: none;
+.shadow-neumorph-pressed {
+  background: #f0f0f0;
+  box-shadow: inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff;
   color: rgb(190, 62, 62);
-  box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.1),
-    inset -4px -4px 10px rgba(255, 255, 255, 0.7);
 }
 
 /* Chat card style with neumorphism */
@@ -50,14 +45,4 @@
     box-shadow: inset 6px 6px 10px rgba(163, 177, 198, 0.8),
       inset -6px -6px 10px rgba(255, 255, 255, 0.7);
   }
-}
-
-.shadow-neumorph {
-  background: #f0f0f0;
-  box-shadow: 5px 5px 10px #d1d1d1, -5px -5px 10px #ffffff;
-}
-
-.shadow-neumorph-pressed {
-  background: #f0f0f0;
-  box-shadow: inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff;
 }
