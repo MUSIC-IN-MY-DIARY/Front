@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ChatComponent from '../components/common/ChatComponent';
 import Header from '../components/common/Header';
 import useAuth from '../hooks/useAuth';
+import PropTypes from 'prop-types';
 
 // apiUrl을 props로 받아서 재사용 가능한 대시보드 컴포넌트
 const DashboardPage = ({ apiUrl }) => {
@@ -24,11 +25,16 @@ const DashboardPage = ({ apiUrl }) => {
         body: JSON.stringify({ content: userInput }),
       });
 
-      if (!response.ok) throw new Error('API 요청 실패');
       const data = await response.json();
-      setResult(data);
+      if (!response.ok || !data.isSuccess) throw new Error(data.message);
+      console.log('서버에서 보냈어!!! ', data);
+
+      setResult(data.result?.answer);
     } catch (error) {
       console.error('요청 실패:', error);
+      setResult({
+        answer: `서버와의 통신중 오류가 발생했다시바러마 프론트 잘못임 ㅅㅂ: ${error.message}`,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -47,6 +53,11 @@ const DashboardPage = ({ apiUrl }) => {
       />
     </div>
   );
+};
+
+// PropTypes를 사용해 apiUrl의 타입을 정의
+DashboardPage.propTypes = {
+  apiUrl: PropTypes.string.isRequired,
 };
 
 export default DashboardPage;

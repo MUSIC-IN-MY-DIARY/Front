@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-const ChatComponent = () => {
+const ChatComponent = ({ apiEndpoint, placeholder, formatResponse }) => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -22,17 +22,14 @@ const ChatComponent = () => {
       setInputText('');
 
       try {
-        const response = await fetch(
-          'http://localhost:8080/diary/recommend-songs',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({ diaryContent: inputText }),
-          }
-        );
+        const response = await fetch(apiEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({ diaryContent: inputText }),
+        });
 
         if (!response.ok) {
           throw new Error('서버에서 오류 응답을 받았습니다.');
@@ -41,18 +38,13 @@ const ChatComponent = () => {
         const data = await response.json();
 
         if (data.isSuccess) {
-          const songs = JSON.parse(data.result.answer);
-
-          const formattedSongs = songs
-            .map(
-              (song) =>
-                `🎵 ${song.song_title} - ${song.artist}\n장르: ${song.genre}`
-            )
-            .join('\n\n');
+          const formattedText = formatResponse
+            ? formatResponse(data.result.answer)
+            : data.result.answer;
 
           const chatMessage = {
             type: 'chatbot',
-            text: `추천 노래 목록:\n\n${formattedSongs}`,
+            text: formattedText,
           };
 
           setMessages((prev) => [...prev, chatMessage]);
@@ -107,7 +99,7 @@ const ChatComponent = () => {
             }
           }}
           disabled={isLoading}
-          placeholder={isLoading ? '처리 중...' : '일기를 작성해보세요! 💌'}
+          placeholder={isLoading ? '처리 중...' : placeholder}
           className='neumorphism-input'
         />
         <button

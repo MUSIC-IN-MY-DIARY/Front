@@ -21,7 +21,7 @@ const Header = () => {
                 : 'shadow-neumorph'
             }`}
           >
-            노래 추천
+            Recommend Songs
           </button>
           <button
             onClick={() => navigate('/diary/generate-lyrics')}
@@ -31,7 +31,7 @@ const Header = () => {
                 : 'shadow-neumorph'
             }`}
           >
-            가사 생성
+            Generate Lyrics
           </button>
           <button
             onClick={() => navigate('/member/mypage')}

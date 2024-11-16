@@ -1,7 +1,28 @@
 /* src/neumorphism.css */
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 기본 폰트 설정 */
+@layer base {
+  html {
+    font-family: 'Indie Flower', 'Noto Sans KR', system-ui, sans-serif;
+  }
+
+  /* 한글은 Indie Flower가 지원하지 않으므로 별도 설정 */
+  :lang(ko) {
+    font-family: 'Noto Sans KR', system-ui, sans-serif;
+  }
+
+  /* 영문 제목에만 Indie Flower 적용 */
+  h1,
+  h2,
+  h3 {
+    font-family: 'Indie Flower', cursive;
+  }
+}
 
 .neumorphism-button {
   @apply p-3 rounded-lg border transition-all duration-200 ease-out;

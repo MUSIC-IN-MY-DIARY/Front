@@ -60,14 +60,14 @@ const BookmarkComponent = () => {
           disabled={currentPage === 1}
           className='neumorphism-button'
         >
-          이전
+          Prev
         </button>
         <button
           onClick={goToNextPage}
           disabled={currentPage === totalPages}
           className='neumorphism-button'
         >
-          다음
+          Next
         </button>
       </div>
     </div>

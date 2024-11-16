@@ -12,7 +12,6 @@ const SignupForm = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [errorMessage, setErrorMseeage] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
