@@ -1,12 +1,18 @@
 import { useState } from 'react';
 import '../../neumorphism.css';
 import { useNavigate } from 'react-router-dom';
+import ToastMessage from '../common/ToastMessage';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [toast, setToast] = useState({
+    show: false,
+    message: '',
+    type: 'success',
+  });
 
   const handleSignup = () => {
     navigate('/member/signup');
@@ -28,15 +34,26 @@ const LoginForm = () => {
       });
 
       if (response.ok) {
-        // const data = await response.json();
-        // console.log('로그인 성공 : ', data);
-        navigate('/diary/recommend-songs');
+        setToast({
+          show: true,
+          message: '로그인 성공!',
+          type: 'success',
+        });
+        setTimeout(() => navigate('/diary/recommend-songs'), 500);
       } else {
         const errorData = await response.json();
-        setError(errorData.message || '로그인에 실패했습니다.');
+        setToast({
+          show: true,
+          message: errorData.message || '로그인에 실패했습니다.',
+          type: 'error',
+        });
       }
     } catch (error) {
-      setError('서버와의 통신 중 오류가 발생했습니다.');
+      setToast({
+        show: true,
+        message: '서버와의 통신 중 오류가 발생했습니다.',
+        type: 'error',
+      });
     }
   };
 
@@ -94,6 +111,13 @@ const LoginForm = () => {
           sign up
         </button>
       </form>
+      {toast.show && (
+        <ToastMessage
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast({ ...toast, show: false })}
+        />
+      )}
     </div>
   );
 };

@@ -1,27 +1,48 @@
 import { useEffect } from 'react';
 
 const BookmarkDetailModal = ({ isOpen, onClose, data, type }) => {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
+  const handleDelete = async () => {
+    try {
+      let id;
+      if (type === 'recommend-songs') {
+        id = data.diary?.diary_id;
+      } else {
+        id = data.chat?.chat_id;
+      }
 
-      // ESC 키 이벤트 핸들러
-      const handleEsc = (event) => {
-        if (event.key === 'Escape') {
-          onClose();
-        }
-      };
+      if (!id) {
+        console.error('삭제할 북마크의 ID를 찾을 수 없습니다.', data);
+        return;
+      }
 
-      // 이벤트 리스너 등록
-      document.addEventListener('keydown', handleEsc);
+      console.log('삭제 요청 ID:', id);
 
-      // 클린업 함수
-      return () => {
-        document.body.style.overflow = 'unset';
-        document.removeEventListener('keydown', handleEsc);
-      };
+      const response = await fetch(`http://localhost:8080/bookmark/${id}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('삭제 응답:', result);
+
+      if (result.isSuccess) {
+        onClose();
+        window.location.reload();
+      } else {
+        throw new Error(result.message || '북마크 삭제 실패');
+      }
+    } catch (error) {
+      console.error('북마크 삭제 중 오류 발생:', error);
     }
-  }, [isOpen, onClose]);
+  };
 
   if (!isOpen || !data) return null;
 
@@ -44,12 +65,26 @@ const BookmarkDetailModal = ({ isOpen, onClose, data, type }) => {
       <div className='bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto'>
         <div className='flex justify-between items-center mb-4'>
           <h2 className='text-xl font-bold'>북마크 상세</h2>
-          <button
-            onClick={onClose}
-            className='text-gray-500 hover:text-gray-700'
-          >
-            ✕
-          </button>
+          <div className='flex items-center gap-4'>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete();
+              }}
+              className='text-red-500 hover:text-red-700'
+            >
+              삭제
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onClose();
+              }}
+              className='text-gray-500 hover:text-gray-700'
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
         <div className='space-y-4'>

@@ -4,6 +4,26 @@ import SignupPage from './pages/SignupPage';
 import RecommendSongsPage from './pages/RecommendSongsPage';
 import GenerateLyricsPage from './pages/GenerateLyricsPage';
 import MyPage from './pages/MyPage';
+import { useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+const ProtectedRoute = ({ children }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const isLoggedOut = localStorage.getItem('isLoggedOut');
+
+    if (isLoggedOut === 'true' && location.pathname !== '/') {
+      navigate('/', {
+        replace: true,
+        state: { message: '로그인이 필요합니다.' },
+      });
+    }
+  }, [navigate, location]);
+
+  return children;
+};
 
 const App = () => {
   return (

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import TypewriterEffect from './TypewriterEffect';
+import ToastMessage from './ToastMessage';
 
 const ChatComponent = ({ apiEndpoint, placeholder, formatResponse }) => {
   const [messages, setMessages] = useState([]);
@@ -7,6 +8,11 @@ const ChatComponent = ({ apiEndpoint, placeholder, formatResponse }) => {
   const [isLoading, setIsLoading] = useState(false);
   const chatContainerRef = useRef(null);
   const [bookmarkLoading, setBookmarkLoading] = useState(false);
+  const [toast, setToast] = useState({
+    show: false,
+    message: '',
+    type: 'success',
+  });
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -50,13 +56,25 @@ const ChatComponent = ({ apiEndpoint, placeholder, formatResponse }) => {
         });
 
         const action = data.result.is_bookmarked ? '추가' : '제거';
-        alert(`북마크가 ${action}되었습니다.`);
+        setToast({
+          show: true,
+          message: `북마크가 ${action}되었습니다`,
+          type: 'success',
+        });
       } else {
-        alert(`북마크 처리 실패: ${data.message}`);
+        setToast({
+          show: true,
+          message: `북마크 처리 실패: ${data.message}`,
+          type: 'error',
+        });
       }
     } catch (error) {
       console.error('북마크 처리 중 오류:', error);
-      alert('북마크 처리 중 오류가 발생했습니다.');
+      setToast({
+        show: true,
+        message: '북마크 처리 중 오류가 발생했습니다',
+        type: 'error',
+      });
     } finally {
       setBookmarkLoading(false);
     }
@@ -147,13 +165,13 @@ const ChatComponent = ({ apiEndpoint, placeholder, formatResponse }) => {
               {message.chatId && (
                 <button
                   onClick={(e) => handleBookmark(message.chatId, e)}
-                  className='absolute top-0 right-0 p-2 transition-all duration-200'
+                  className='absolute top-2 right-2 p-2 transition-all duration-200'
                 >
                   <span
                     className={`text-xl ${
                       message.is_bookmarked
-                        ? 'text-[#BE3E3E]'
-                        : 'text-gray-400 hover:text-[#BE3E3E]'
+                        ? 'text-yellow-400'
+                        : 'text-gray-400 hover:text-yellow-400'
                     }`}
                   >
                     {message.is_bookmarked ? '★' : '☆'}
@@ -185,7 +203,7 @@ const ChatComponent = ({ apiEndpoint, placeholder, formatResponse }) => {
   };
 
   return (
-    <div className='flex flex-col h-screen'>
+    <div className='flex flex-col h-screen overflow-hidden'>
       <div
         ref={chatContainerRef}
         className='flex-1 p-6 overflow-y-auto bg-gray-50'
@@ -238,6 +256,14 @@ const ChatComponent = ({ apiEndpoint, placeholder, formatResponse }) => {
           </button>
         </div>
       </div>
+
+      {toast.show && (
+        <ToastMessage
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast({ ...toast, show: false })}
+        />
+      )}
     </div>
   );
 };

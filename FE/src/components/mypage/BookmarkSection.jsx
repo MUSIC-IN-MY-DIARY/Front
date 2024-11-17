@@ -12,13 +12,6 @@ const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
 
   useEffect(() => {
     if (isExpanded) {
-      setCurrentPage(0);
-      fetchBookmarks(0);
-    }
-  }, [isExpanded, type]);
-
-  useEffect(() => {
-    if (isExpanded && currentPage > 0) {
       fetchBookmarks(currentPage);
     }
   }, [currentPage, isExpanded, type]);
@@ -26,7 +19,6 @@ const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
   const fetchBookmarks = async (page) => {
     setIsLoading(true);
     try {
-      console.log(`Fetching ${type} bookmarks for page ${page}`);
       const response = await fetch(
         `http://localhost:8080/bookmark/all/${type}?page=${page}`,
         {
@@ -35,14 +27,18 @@ const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
       );
 
       const data = await response.json();
-      console.log('Raw response:', data);
-      console.log('Bookmarks from response:', data.result.bookmarks);
 
       if (data.isSuccess) {
         setBookmarks(data.result.bookmarks || []);
         const { pageInfo } = data.result;
         if (pageInfo) {
-          setTotalPages(Math.ceil(pageInfo.totalCount / pageInfo.pageSize));
+          const totalPages = Math.ceil(pageInfo.totalCount / pageInfo.pageSize);
+          setTotalPages(totalPages);
+
+          if (page >= totalPages) {
+            const lastPage = Math.max(0, totalPages - 1);
+            setCurrentPage(lastPage);
+          }
         }
       }
     } catch (error) {
@@ -50,6 +46,10 @@ const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const refreshBookmarks = () => {
+    fetchBookmarks(currentPage);
   };
 
   const handleBookmarkClick = async (id) => {
@@ -69,6 +69,25 @@ const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
       }
     } catch (error) {
       console.error('상세 조회 실패:', error);
+    }
+  };
+
+  const handleDeleteBookmark = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:8080/bookmark/${id}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+      if (data.isSuccess) {
+        refreshBookmarks();
+      }
+    } catch (error) {
+      console.error('북마크 삭제 실패:', error);
     }
   };
 

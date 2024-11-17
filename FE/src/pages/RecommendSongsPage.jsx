@@ -24,7 +24,7 @@ const RecommendSongsPage = () => {
   };
 
   return (
-    <div className='flex flex-col h-screen'>
+    <div className='flex flex-col h-screen overflow-hidden'>
       <Header />
       <ChatComponent
         apiEndpoint='http://localhost:8080/diary/recommend-songs'

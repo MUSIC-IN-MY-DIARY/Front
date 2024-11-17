@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import '../../neumorphism.css';
 import { useNavigate } from 'react-router-dom';
+import ToastMessage from '../common/ToastMessage';
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,11 @@ const SignupForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+  const [toast, setToast] = useState({
+    show: false,
+    message: '',
+    type: 'success',
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,7 +32,11 @@ const SignupForm = () => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert('패스워드가 일치하지 않습니다.');
+      setToast({
+        show: true,
+        message: '패스워드가 일치하지 않습니다.',
+        type: 'error',
+      });
       return;
     }
 
@@ -45,14 +55,25 @@ const SignupForm = () => {
 
       const data = await response.json();
       if (response.ok && data.isSuccess) {
-        alert('회원가입 성공!');
-        navigate('/');
+        setToast({
+          show: true,
+          message: '회원가입에 성공했습니다!',
+          type: 'success',
+        });
+        setTimeout(() => navigate('/'), 2000); // 토스트 메시지를 보여준 후 이동
       } else {
-        alert(data.message || '회원가입 실패. 다시 시도해주세요!');
+        setToast({
+          show: true,
+          message: data.message || '회원가입 실패. 다시 시도해주세요!',
+          type: 'error',
+        });
       }
     } catch (error) {
-      alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      // console.log('오류 발생 ', error);
+      setToast({
+        show: true,
+        message: '오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        type: 'error',
+      });
     }
   };
 
@@ -122,6 +143,13 @@ const SignupForm = () => {
           Sign up
         </button>
       </form>
+      {toast.show && (
+        <ToastMessage
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast({ ...toast, show: false })}
+        />
+      )}
     </div>
   );
 };
