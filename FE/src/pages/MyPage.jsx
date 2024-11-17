@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../components/common/Header';
 import BookmarkSection from '../components/mypage/BookmarkSection';
 
@@ -7,8 +7,29 @@ const MyPage = () => {
     songs: false,
     lyrics: false,
   });
+  const [nickname, setNickname] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
-  const nickname = 'Tester';
+  // 초기 데이터 로딩
+  useEffect(() => {
+    const fetchMemberInfo = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/member/info', {
+          credentials: 'include',
+        });
+        const data = await response.json();
+        if (data.isSuccess) {
+          setNickname(data.result.nickname);
+        }
+      } catch (error) {
+        console.error('사용자 정보 로딩 실패:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMemberInfo();
+  }, []);
 
   const toggleSection = (sectionType) => {
     setExpandedSections((prev) => ({
@@ -16,6 +37,10 @@ const MyPage = () => {
       [sectionType]: !prev[sectionType],
     }));
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className='min-h-screen bg-gray-100'>
@@ -27,13 +52,13 @@ const MyPage = () => {
         <div className='space-y-6 max-w-4xl mx-auto'>
           <BookmarkSection
             title='🎵 노래 추천'
-            type='songs'
+            type='recommend-songs'
             isExpanded={expandedSections.songs}
             onToggle={() => toggleSection('songs')}
           />
           <BookmarkSection
             title='✍️ 작사 추천'
-            type='lyrics'
+            type='generate-lyrics'
             isExpanded={expandedSections.lyrics}
             onToggle={() => toggleSection('lyrics')}
           />

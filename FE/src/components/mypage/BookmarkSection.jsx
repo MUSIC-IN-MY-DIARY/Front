@@ -1,14 +1,24 @@
 import { useState, useEffect } from 'react';
 import Pagination from './Pagination';
+import BookmarkDetailModal from './BookmarkDetailModal';
 
 const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
   const [bookmarks, setBookmarks] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedBookmark, setSelectedBookmark] = useState(null);
 
   useEffect(() => {
     if (isExpanded) {
+      setCurrentPage(0);
+      fetchBookmarks(0);
+    }
+  }, [isExpanded, type]);
+
+  useEffect(() => {
+    if (isExpanded && currentPage > 0) {
       fetchBookmarks(currentPage);
     }
   }, [currentPage, isExpanded, type]);
@@ -16,21 +26,87 @@ const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
   const fetchBookmarks = async (page) => {
     setIsLoading(true);
     try {
+      console.log(`Fetching ${type} bookmarks for page ${page}`);
       const response = await fetch(
-        `http://localhost:8080/bookmarks/${type}?page=${page}`,
+        `http://localhost:8080/bookmark/all/${type}?page=${page}`,
         {
           credentials: 'include',
         }
       );
+
       const data = await response.json();
+      console.log('Raw response:', data);
+      console.log('Bookmarks from response:', data.result.bookmarks);
+
       if (data.isSuccess) {
-        setBookmarks(data.result.bookmarks);
-        setTotalPages(data.result.totalPages);
+        setBookmarks(data.result.bookmarks || []);
+        const { pageInfo } = data.result;
+        if (pageInfo) {
+          setTotalPages(Math.ceil(pageInfo.totalCount / pageInfo.pageSize));
+        }
       }
     } catch (error) {
       console.error('북마크 로딩 실패:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleBookmarkClick = async (id) => {
+    try {
+      const idParam = type === 'recommend-songs' ? 'songId' : 'chatId';
+      const response = await fetch(
+        `http://localhost:8080/bookmark/detail/${type}?${idParam}=${id}`,
+        {
+          credentials: 'include',
+        }
+      );
+
+      const data = await response.json();
+      if (data.isSuccess) {
+        setSelectedBookmark(data.result);
+        setModalOpen(true);
+      }
+    } catch (error) {
+      console.error('상세 조회 실패:', error);
+    }
+  };
+
+  const renderBookmarkCard = (bookmark) => {
+    if (type === 'recommend-songs') {
+      return (
+        <div
+          key={bookmark.diaryId}
+          onClick={() => handleBookmarkClick(bookmark.songIds[0])}
+          className='bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer h-40 overflow-hidden'
+        >
+          <div className='text-gray-700 mb-3 line-clamp-2'>
+            {bookmark.diaryContent}
+          </div>
+          <div className='text-sm text-gray-500 line-clamp-2'>
+            {bookmark.songTitles ? (
+              <>추천된 노래: {bookmark.songTitles.join(', ')}</>
+            ) : (
+              <>추천된 노래 정보를 불러올 수 없습니다.</>
+            )}
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div
+          key={bookmark.chatId}
+          onClick={() => handleBookmarkClick(bookmark.chatId)}
+          className='bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer h-40 overflow-hidden'
+        >
+          <div className='text-gray-700 mb-3 line-clamp-2'>
+            {bookmark.diaryContent}
+          </div>
+          <div className='text-sm text-gray-500 line-clamp-2'>
+            {bookmark.generatedLyrics}
+          </div>
+        </div>
+      );
     }
   };
 
@@ -52,42 +128,8 @@ const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
             <div className='text-center py-10'>Loading...</div>
           ) : (
             <>
-              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-                {type === 'songs'
-                  ? // 노래 북마크 카드
-                    bookmarks.map((bookmark) => (
-                      <div
-                        key={bookmark.id}
-                        className='bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow'
-                      >
-                        <div className='text-lg font-semibold mb-2'>
-                          🎵 {bookmark.song_title}
-                        </div>
-                        <div className='text-gray-600 mb-1'>
-                          🎤 {bookmark.artist}
-                        </div>
-                        <div className='text-gray-500 text-sm'>
-                          🎼 {bookmark.genre}
-                        </div>
-                        <div className='text-gray-400 text-xs mt-4'>
-                          {new Date(bookmark.created_at).toLocaleDateString()}
-                        </div>
-                      </div>
-                    ))
-                  : // 작사 북마크 카드
-                    bookmarks.map((bookmark) => (
-                      <div
-                        key={bookmark.id}
-                        className='bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow'
-                      >
-                        <div className='whitespace-pre-line text-gray-700'>
-                          ✍️ {bookmark.lyrics}
-                        </div>
-                        <div className='text-gray-400 text-xs mt-4'>
-                          {new Date(bookmark.created_at).toLocaleDateString()}
-                        </div>
-                      </div>
-                    ))}
+              <div className='grid grid-cols-1 gap-6'>
+                {bookmarks.map(renderBookmarkCard)}
               </div>
               <Pagination
                 currentPage={currentPage}
@@ -98,6 +140,13 @@ const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
           )}
         </div>
       )}
+
+      <BookmarkDetailModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        data={selectedBookmark}
+        type={type}
+      />
     </div>
   );
 };

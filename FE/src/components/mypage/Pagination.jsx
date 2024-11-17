@@ -1,28 +1,20 @@
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   return (
-    <div className='flex justify-center items-center gap-4 mt-8'>
+    <div className='flex justify-center items-center mt-6 gap-4'>
       <button
         onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className={`px-4 py-2 rounded-lg ${
-          currentPage === 1
-            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-            : 'bg-blue-500 text-white hover:bg-blue-600'
-        }`}
+        disabled={currentPage === 0}
+        className='px-4 py-2 rounded-lg bg-blue-500 text-white disabled:bg-gray-300'
       >
         이전
       </button>
-      <span className='text-gray-600'>
-        {currentPage} / {totalPages}
+      <span>
+        {currentPage + 1} / {totalPages}
       </span>
       <button
         onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        className={`px-4 py-2 rounded-lg ${
-          currentPage === totalPages
-            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-            : 'bg-blue-500 text-white hover:bg-blue-600'
-        }`}
+        disabled={currentPage >= totalPages - 1}
+        className='px-4 py-2 rounded-lg bg-blue-500 text-white disabled:bg-gray-300'
       >
         다음
       </button>

@@ -11,7 +11,12 @@ const Header = () => {
   return (
     <header className='w-full p-4 px-10 bg-gray-100 shadow-md'>
       <div className='flex justify-between items-center'>
-        <h1 className='text-2xl font-bold'>MIMD</h1>
+        <h1
+          className='text-2xl font-bold cursor-pointer hover:text-gray-700'
+          onClick={() => navigate('/diary/recommend-songs')}
+        >
+          MIMD
+        </h1>
         <div className='flex items-center gap-4'>
           <button
             onClick={() => navigate('/diary/recommend-songs')}

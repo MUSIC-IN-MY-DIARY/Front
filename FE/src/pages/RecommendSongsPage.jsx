@@ -11,14 +11,15 @@ const RecommendSongsPage = () => {
       return songs
         .map(
           (song, index) =>
-            `🎵 ${song.song_title}
-        🎤 ${song.artist}
-        🎼 ${song.genre}
-        ${index < songs.length - 1 ? '\n-------------------\n' : ''}`
+            `🎵 ${song.song_title}\n` +
+            `🎤 ${song.artist}\n` +
+            `🎹 ${song.genre}` +
+            (index < songs.length - 1 ? '\n\n' : '')
         )
         .join('\n');
     } catch (error) {
-      return answer;
+      console.error('노래 정보 파싱 실패:', error, answer);
+      return '노래 정보를 불러올 수 없습니다.';
     }
   };
 
