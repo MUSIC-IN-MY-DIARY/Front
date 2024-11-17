@@ -3,32 +3,39 @@ import Header from '../components/common/Header';
 import BookmarkSection from '../components/mypage/BookmarkSection';
 
 const MyPage = () => {
-  const [expandedSection, setExpandedSection] = useState('songs'); // 'songs' 또는 'lyrics'
+  const [expandedSections, setExpandedSections] = useState({
+    songs: false,
+    lyrics: false,
+  });
+
   const nickname = 'Tester';
 
+  const toggleSection = (sectionType) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [sectionType]: !prev[sectionType],
+    }));
+  };
+
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className='min-h-screen bg-gray-100'>
       <Header />
       <div className='container mx-auto p-6'>
-        <h1 className='text-4xl font-bold text-center mb-2 my-10'>
+        <h1 className='text-3xl font-bold text-center mb-8 text-gray-700'>
           Hello, {nickname}
         </h1>
-        <div className='mt-8 space-y-4'>
+        <div className='space-y-6 max-w-4xl mx-auto'>
           <BookmarkSection
-            title='🎵 Recommend Songs'
+            title='🎵 노래 추천'
             type='songs'
-            isExpanded={expandedSection === 'songs'}
-            onToggle={() =>
-              setExpandedSection(expandedSection === 'songs' ? null : 'songs')
-            }
+            isExpanded={expandedSections.songs}
+            onToggle={() => toggleSection('songs')}
           />
           <BookmarkSection
-            title='✒️ Generate Lyrics'
+            title='✍️ 작사 추천'
             type='lyrics'
-            isExpanded={expandedSection === 'lyrics'}
-            onToggle={() =>
-              setExpandedSection(expandedSection === 'lyrics' ? null : 'lyrics')
-            }
+            isExpanded={expandedSections.lyrics}
+            onToggle={() => toggleSection('lyrics')}
           />
         </div>
       </div>
