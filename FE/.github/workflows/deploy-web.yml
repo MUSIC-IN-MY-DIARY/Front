@@ -40,7 +40,7 @@ jobs:
           source: './dist/*' # FE 빌드 결과물 디렉토리
           target: '/var/www/html' # Nginx 정적 파일 경로
 
-      # 6. Restart Nginx
+      # 6. Restart N ginx
       - name: Restart Nginx
         uses: appleboy/ssh-action@master
         with:
