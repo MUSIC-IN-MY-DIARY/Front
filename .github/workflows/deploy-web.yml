@@ -22,6 +22,10 @@ jobs:
         with:
           node-version: '18'
 
+      ## 2-1. FE 디렉토리로 이동
+      - name: move to FE directory
+        run: cd FE
+
       # 3. Install dependencies
       - name: Install dependencies
         run: npm install
