@@ -10,6 +10,9 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./FE
 
     steps:
       # 1. Checkout the repository
@@ -21,10 +24,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-
-      ## 2-1. FE 디렉토리로 이동
-      - name: move to FE directory
-        run: cd FE
 
       # 3. Install dependencies
       - name: Install dependencies
@@ -41,8 +40,8 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ubuntu
           key: ${{ secrets.KEY }}
-          source: './dist/*' # FE 빌드 결과물 디렉토리
-          target: '/var/www/html' # Nginx 정적 파일 경로
+          source: './FE/dist/*'
+          target: '/var/www/html'
 
       # 6. Restart N ginx
       - name: Restart Nginx
