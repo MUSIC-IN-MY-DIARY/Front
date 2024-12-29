@@ -40,8 +40,9 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ubuntu
           key: ${{ secrets.KEY }}
-          source: './FE/dist/*'
+          source: 'FE/dist/'
           target: '/var/www/html'
+          strip_components: 2
 
       # 6. Restart N ginx
       - name: Restart Nginx
