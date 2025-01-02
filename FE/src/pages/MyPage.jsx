@@ -14,9 +14,12 @@ const MyPage = () => {
   useEffect(() => {
     const fetchMemberInfo = async () => {
       try {
-        const response = await fetch('http://localhost:8080/member/info', {
-          credentials: 'include',
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/api/member/info`,
+          {
+            credentials: 'include',
+          }
+        );
         const data = await response.json();
         if (data.isSuccess) {
           setNickname(data.result.nickname);

@@ -28,13 +28,16 @@ const ChatComponent = ({ apiEndpoint, placeholder, formatResponse }) => {
 
     setBookmarkLoading(true);
     try {
-      const response = await fetch(`http://localhost:8080/bookmark/${chatId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/bookmark/${chatId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        }
+      );
 
       const data = await response.json();
 

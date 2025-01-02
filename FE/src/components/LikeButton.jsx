@@ -6,10 +6,15 @@ const LikeButton = ({ chatId }) => {
   const onLikeClick = async () => {
     try {
       await handleLike(async () => {
-        return await fetch(`http://localhost:8080/chat/${chatId}/like`, {
-          method: 'POST',
-          credentials: 'include',
-        });
+        return await fetch(
+          `${import.meta.env.VITE_BASE_URL}${
+            import.meta.env.VITE_API_PATH
+          }/chat/${chatId}/like`,
+          {
+            method: 'POST',
+            credentials: 'include',
+          }
+        );
       });
       // 좋아요 성공 처리
     } catch (error) {

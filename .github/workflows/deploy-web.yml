@@ -31,6 +31,8 @@ jobs:
 
       # 4. Build the frontend
       - name: Build frontend
+        env:
+          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
         run: npm run build
 
       # 5. Deploy dist/ to the server using SCP

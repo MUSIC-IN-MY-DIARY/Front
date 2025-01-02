@@ -20,7 +20,9 @@ const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:8080/bookmark/all/${type}?page=${page}`,
+        `${
+          import.meta.env.VITE_BASE_URL
+        }/api/bookmark/all/${type}?page=${page}`,
         {
           credentials: 'include',
         }
@@ -56,7 +58,9 @@ const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
     try {
       const idParam = type === 'recommend-songs' ? 'songId' : 'chatId';
       const response = await fetch(
-        `http://localhost:8080/bookmark/detail/${type}?${idParam}=${id}`,
+        `${
+          import.meta.env.VITE_BASE_URL
+        }/api/bookmark/detail/${type}?${idParam}=${id}`,
         {
           credentials: 'include',
         }
@@ -74,13 +78,16 @@ const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
 
   const handleDeleteBookmark = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/bookmark/${id}`, {
-        method: 'PUT',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/bookmark/${id}`,
+        {
+          method: 'PUT',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       const data = await response.json();
       if (data.isSuccess) {

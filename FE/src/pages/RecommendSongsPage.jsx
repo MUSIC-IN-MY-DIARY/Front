@@ -27,7 +27,9 @@ const RecommendSongsPage = () => {
     <div className='flex flex-col h-screen overflow-hidden'>
       <Header />
       <ChatComponent
-        apiEndpoint='http://localhost:8080/diary/recommend-songs'
+        apiEndpoint={`${
+          import.meta.env.VITE_BASE_URL
+        }/api/diary/recommend-songs`}
         placeholder='오늘의 감정을 자유롭게 적어주세요! 💌'
         formatResponse={formatSongsResponse}
       />

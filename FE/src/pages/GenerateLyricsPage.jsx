@@ -9,7 +9,9 @@ const GenerateLyricsPage = () => {
     <div className='flex flex-col h-screen'>
       <Header />
       <ChatComponent
-        apiEndpoint='http://localhost:8080/diary/generate-lyrics'
+        apiEndpoint={`${
+          import.meta.env.VITE_BASE_URL
+        }/api/diary/generate-lyrics`}
         placeholder='가사로 만들고 싶은 이야기를 적어주세요! ✍️'
       />
     </div>

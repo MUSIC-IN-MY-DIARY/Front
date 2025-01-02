@@ -17,14 +17,17 @@ const BookmarkDetailModal = ({ isOpen, onClose, data, type }) => {
 
       console.log('삭제 요청 ID:', id);
 
-      const response = await fetch(`http://localhost:8080/bookmark/${id}`, {
-        method: 'PUT',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({}),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/bookmark/${id}`,
+        {
+          method: 'PUT',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({}),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

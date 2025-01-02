@@ -7,10 +7,13 @@ const useAuth = () => {
   useEffect(() => {
     const verifyAuth = async () => {
       try {
-        const response = await fetch('http://localhost:8080/member/verify', {
-          method: 'GET',
-          credentials: 'include', // 쿠키 포함
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/api/member/verify`,
+          {
+            method: 'GET',
+            credentials: 'include', // 쿠키 포함
+          }
+        );
 
         if (!response.ok) {
           navigate('/');

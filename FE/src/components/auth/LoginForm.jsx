@@ -27,11 +27,14 @@ const LoginForm = () => {
       formData.append('username', username);
       formData.append('password', password);
 
-      const response = await fetch('http://localhost:8080/login', {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/login`,
+        {
+          method: 'POST',
+          body: formData,
+          credentials: 'include',
+        }
+      );
 
       if (response.ok) {
         setToast({

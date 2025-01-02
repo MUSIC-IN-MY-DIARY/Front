@@ -41,17 +41,20 @@ const SignupForm = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:8080/member/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: formData.username,
-          password: formData.password,
-          nickname: formData.nickname,
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/member/signup`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: formData.username,
+            password: formData.password,
+            nickname: formData.nickname,
+          }),
+        }
+      );
 
       const data = await response.json();
       if (response.ok && data.isSuccess) {

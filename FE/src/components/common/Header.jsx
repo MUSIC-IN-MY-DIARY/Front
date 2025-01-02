@@ -24,13 +24,16 @@ const Header = () => {
   const handleLogoutConfirm = async () => {
     try {
       // 로그아웃 API 호출
-      const response = await fetch('http://localhost:8080/member/logout', {
-        method: 'POST',
-        credentials: 'include', // 쿠키 포함
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/member/logout`,
+        {
+          method: 'POST',
+          credentials: 'include', // 쿠키 포함
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       if (response.ok) {
         // 브라우저의 모든 쿠키 삭제
