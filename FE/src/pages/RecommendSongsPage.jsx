@@ -29,7 +29,7 @@ const RecommendSongsPage = () => {
       <ChatComponent
         apiEndpoint={`${
           import.meta.env.VITE_BASE_URL
-        }/api/diary/recommend-songs`}
+        }/api/v1/diary/recommend-songs`}
         placeholder='오늘의 감정을 자유롭게 적어주세요! 💌'
         formatResponse={formatSongsResponse}
       />

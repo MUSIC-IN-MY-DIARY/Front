@@ -11,7 +11,7 @@ const GenerateLyricsPage = () => {
       <ChatComponent
         apiEndpoint={`${
           import.meta.env.VITE_BASE_URL
-        }/api/diary/generate-lyrics`}
+        }/api/v1/diary/generate-lyrics`}
         placeholder='가사로 만들고 싶은 이야기를 적어주세요! ✍️'
       />
     </div>
