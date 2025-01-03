@@ -28,7 +28,7 @@ const LoginForm = () => {
       formData.append('password', password);
 
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/login`,
+        `${import.meta.env.VITE_BASE_URL}/api/v1/login`,
         {
           method: 'POST',
           body: formData,

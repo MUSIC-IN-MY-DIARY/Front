@@ -25,7 +25,7 @@ const Header = () => {
     try {
       // 로그아웃 API 호출
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/member/logout`,
+        `${import.meta.env.VITE_BASE_URL}/api/v1/member/logout`,
         {
           method: 'POST',
           credentials: 'include', // 쿠키 포함

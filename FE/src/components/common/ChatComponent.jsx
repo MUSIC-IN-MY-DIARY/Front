@@ -29,7 +29,7 @@ const ChatComponent = ({ apiEndpoint, placeholder, formatResponse }) => {
     setBookmarkLoading(true);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/bookmark/${chatId}`,
+        `${import.meta.env.VITE_BASE_URL}/api/v1/bookmark/${chatId}`,
         {
           method: 'PUT',
           headers: {

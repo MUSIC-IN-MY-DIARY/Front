@@ -18,7 +18,7 @@ const BookmarkDetailModal = ({ isOpen, onClose, data, type }) => {
       console.log('삭제 요청 ID:', id);
 
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/bookmark/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/v1/bookmark/${id}`,
         {
           method: 'PUT',
           credentials: 'include',

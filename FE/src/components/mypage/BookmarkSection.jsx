@@ -22,7 +22,7 @@ const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
       const response = await fetch(
         `${
           import.meta.env.VITE_BASE_URL
-        }/api/bookmark/all/${type}?page=${page}`,
+        }/api/v1/bookmark/all/${type}?page=${page}`,
         {
           credentials: 'include',
         }
@@ -60,7 +60,7 @@ const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
       const response = await fetch(
         `${
           import.meta.env.VITE_BASE_URL
-        }/api/bookmark/detail/${type}?${idParam}=${id}`,
+        }/api/v1/bookmark/detail/${type}?${idParam}=${id}`,
         {
           credentials: 'include',
         }
@@ -79,7 +79,7 @@ const BookmarkSection = ({ title, type, isExpanded, onToggle }) => {
   const handleDeleteBookmark = async (id) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/bookmark/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/v1/bookmark/${id}`,
         {
           method: 'PUT',
           credentials: 'include',

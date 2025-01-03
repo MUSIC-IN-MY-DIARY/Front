@@ -8,7 +8,7 @@ const useAuth = () => {
     const verifyAuth = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/api/member/verify`,
+          `${import.meta.env.VITE_BASE_URL}/api/v1/member/verify`,
           {
             method: 'GET',
             credentials: 'include', // 쿠키 포함
