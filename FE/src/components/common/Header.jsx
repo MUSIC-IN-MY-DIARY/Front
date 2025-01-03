@@ -81,15 +81,15 @@ const Header = () => {
       <div className='flex justify-between items-center'>
         <h1
           className='text-2xl font-bold cursor-pointer hover:text-gray-700'
-          onClick={() => navigate('/diary/recommend-songs')}
+          onClick={() => navigate('/api/v1/diary/recommend-songs')}
         >
           MIMD
         </h1>
         <div className='flex items-center gap-4'>
           <button
-            onClick={() => navigate('/diary/recommend-songs')}
+            onClick={() => navigate('/api/v1/diary/recommend-songs')}
             className={`neumorphism-button ${
-              isActive('/diary/recommend-songs')
+              isActive('/api/v1/diary/recommend-songs')
                 ? 'shadow-neumorph-pressed'
                 : 'shadow-neumorph'
             }`}
@@ -97,7 +97,7 @@ const Header = () => {
             🎶 Recommend Songs
           </button>
           <button
-            onClick={() => navigate('/diary/generate-lyrics')}
+            onClick={() => navigate('/api/v1/diary/generate-lyrics')}
             className={`neumorphism-button ${
               isActive('/diary/generate-lyrics')
                 ? 'shadow-neumorph-pressed'
